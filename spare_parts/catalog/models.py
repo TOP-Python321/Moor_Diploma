@@ -99,6 +99,13 @@ class Tires(models.Model):
                                 help_text='Укажите цену',
                                 verbose_name='Цена')
     
+    def __str__(self) -> str:
+        return f'{self.brand} {self.model}'
+    
+    def get_absolute_url(self):
+        return reverse("model_detail", args=[str(self.id)])
+    
+    
     
     class Rims(models.Model):
         """Модель, описывающая колесный диск"""
@@ -132,6 +139,12 @@ class Tires(models.Model):
                                 max_digits=8,
                                 help_text='Укажите цену',
                                 verbose_name='Цена')
+        
+        def __str__(self) -> str:
+            return self.brand
+    
+        def get_absolute_url(self):
+            return reverse("model_detail", args=[str(self.id)])
         
         
     
