@@ -32,7 +32,7 @@ class ModelCar(models.Model):
 class SparePart(models.Model):
     """Модель, описывающая запасную часть"""
     STATE_CHOICES = [
-        ('perfect','Отличное'),
+        ('perfect','отличное'),
         ('good', 'хорошее'),
         ('satisfactory', 'удовлетворительное')
     ]
@@ -67,6 +67,9 @@ class SparePart(models.Model):
                                 help_text='Укажите цену',
                                 verbose_name='Цена')
     
+    class Meta:
+        ordering = ['-id']
+    
     def __str__(self) -> str:
         return self.name
     
@@ -98,6 +101,9 @@ class Tires(models.Model):
                                 max_digits=8,
                                 help_text='Укажите цену',
                                 verbose_name='Цена')
+    
+    class Meta:
+        ordering = ['-id']
     
     def __str__(self) -> str:
         return f'{self.brand} {self.model}'
@@ -140,6 +146,9 @@ class Tires(models.Model):
                                 help_text='Укажите цену',
                                 verbose_name='Цена')
         
+        class Meta:
+            ordering = ['-id']
+        
         def __str__(self) -> str:
             return self.brand
     
@@ -147,4 +156,17 @@ class Tires(models.Model):
             return reverse("model_detail", args=[str(self.id)])
         
         
+class SpareState(models.Model):
+    SPARES_STATE_CHOICES = [
+        ('stock', 'на складе'),
+        ('reserve', 'резерв')
+    ]
+    spares_id = models.ForeignKey('SparePart',
+                                  on_delete=models.CASCADE)
+    status = models.CharField(max_length=10,
+                              help_text='Изменить состояние заказа',
+                              verbose_name='Состояние заказа',
+                              choices=SPARES_STATE_CHOICES)
     
+    def __str__(self) -> str:
+        return f'{self.spares_id} Статус: {self.status}'
