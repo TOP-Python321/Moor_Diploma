@@ -113,47 +113,47 @@ class Tires(models.Model):
     
     
     
-    class Rims(models.Model):
-        """Модель, описывающая колесный диск"""
-        PRODUCTION_CHOICES = [
-            ('alloy', 'литые'),
-            ('forged', 'кованные'),
-            ('stamped', 'штампованные')
-        ]
-        brand = models.CharField(max_length=50, 
-                             help_text='Укажите производителя',
-                             verbose_name='Производитель',
-                             blank=True,
-                             null=True)
-        production = models.CharField(max_length=12,
-                                      help_text='Укажите метод изготовления диска',
-                                      verbose_name='Метод изготовления',
-                                      choices=PRODUCTION_CHOICES)
-        diameter = models.CharField(max_length=2,
-                                help_text='Укажите диаметр диска',
-                                verbose_name='Диаметр')
-        bolt_pattern = models.CharField(max_length=10, 
-                                        help_text='Укажите сверловку/разболтовку',
-                                        verbose_name='Сверловка')
-        description = models.CharField(max_length=100, 
-                                   help_text='Краткое описание: состояние, количество и т.д.',
-                                   verbose_name='Описание')
-        photo = models.ImageField(upload_to='images',
-                              help_text='Загрузите фото диска',
-                              verbose_name='Фото шины'),
-        price = models.DecimalField(decimal_places=2, 
-                                max_digits=8,
-                                help_text='Укажите цену',
-                                verbose_name='Цена')
-        
-        class Meta:
-            ordering = ['-id']
-        
-        def __str__(self) -> str:
-            return self.brand
+class Rims(models.Model):
+    """Модель, описывающая колесный диск"""
+    PRODUCTION_CHOICES = [
+        ('alloy', 'литые'),
+        ('forged', 'кованные'),
+        ('stamped', 'штампованные')
+    ]
+    brand = models.CharField(max_length=50, 
+                            help_text='Укажите производителя',
+                            verbose_name='Производитель',
+                            blank=True,
+                            null=True)
+    production = models.CharField(max_length=12,
+                                    help_text='Укажите метод изготовления диска',
+                                    verbose_name='Метод изготовления',
+                                    choices=PRODUCTION_CHOICES)
+    diameter = models.CharField(max_length=2,
+                            help_text='Укажите диаметр диска',
+                            verbose_name='Диаметр')
+    bolt_pattern = models.CharField(max_length=10, 
+                                    help_text='Укажите сверловку/разболтовку',
+                                    verbose_name='Сверловка')
+    description = models.CharField(max_length=100, 
+                                help_text='Краткое описание: состояние, количество и т.д.',
+                                verbose_name='Описание')
+    photo = models.ImageField(upload_to='images',
+                            help_text='Загрузите фото диска',
+                            verbose_name='Фото шины'),
+    price = models.DecimalField(decimal_places=2, 
+                            max_digits=8,
+                            help_text='Укажите цену',
+                            verbose_name='Цена')
     
-        def get_absolute_url(self):
-            return reverse("model_detail", args=[str(self.id)])
+    class Meta:
+        ordering = ['-id']
+    
+    def __str__(self) -> str:
+        return self.brand
+
+    def get_absolute_url(self):
+        return reverse("model_detail", args=[str(self.id)])
         
         
 class SpareState(models.Model):
