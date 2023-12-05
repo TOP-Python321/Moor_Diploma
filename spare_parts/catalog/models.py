@@ -2,171 +2,227 @@ from django.db import models
 from django.urls import reverse
 
 
-class Brands(models.Model):
-    """Модель, описывающая марку автомобиля"""
+class Brand(models.Model):
+    """Модель, описывающая бренд товара"""
+    
+    class Meta:
+        db_table = 'brand'
+        verbose_name = 'Бренд'
+        verbose_name_plural = 'Бренды'
+        
     brand_name = models.CharField(max_length=45, 
-                                  help_text='Введите марку а/м', 
-                                  verbose_name='Марка а/м')
+                                  help_text='Введите бренд', 
+                                  verbose_name='Название бренда',
+                                  editable=True)
     
     def __str__(self) -> str:
         return self.brand_name
     
     
-class ModelCar(models.Model):
-    """Модель, описывающая модель автомобиля"""
+class ProductModel(models.Model):
+    """Модель, описывающая модель товара"""
+    
+    class Meta:
+        db_table = 'product_model'
+        verbose_name = 'Модель'
+        verbose_name_plural = 'Модели'
+        
     model_name = models.CharField(max_length=100, 
-                                  help_text='Введите модель а/м', 
-                                  verbose_name='Модель а/м')
-    brand_id = models.ForeignKey('Brands', 
+                                  help_text='Введите модель', 
+                                  verbose_name='Модель товара',
+                                  editable=True)
+    brand_id = models.ForeignKey('Brand', 
                                  on_delete=models.CASCADE, 
-                                 help_text='Выберите марку а/м', )
-    year = models.CharField(max_length=10, 
-                            help_text='Введите год выпуска', 
-                            verbose_name='Год выпуска')
+                                 help_text='Выберите бренд', )
+    year = models.CharField(max_length=30, 
+                            help_text='Введите год выпуска или поколение', 
+                            verbose_name='Год выпуска(поколение)',
+                            editable=True)
     
     def __str__(self) -> str:
-        return f'{self.model_name} {self.year}'
+        return f'{self.brand_id} - {self.model_name} - {self.year}'
     
     
-    
-class SparePart(models.Model):
-    """Модель, описывающая запасную часть"""
-    STATE_CHOICES = [
-        ('perfect','отличное'),
-        ('good', 'хорошее'),
-        ('satisfactory', 'удовлетворительное')
-    ]
-    name = models.CharField(max_length=100,
-                            help_text='Введите название запчасти',
-                            verbose_name='Название запчасти')
-    brand_id = models.ForeignKey('Brands',
-                                 on_delete=models.CASCADE,
-                                 help_text='Выберите марку а/м',
-                                 verbose_name='Марка а/м')
-    model_id = models.ForeignKey('ModelCar',
-                                 on_delete=models.CASCADE,
-                                 help_text='Выберите модель а/м',
-                                 verbose_name='Модель а/м')
-    vendore_code = models.CharField(max_length=13,
-                                    help_text='Должно содержать 13 символов (АА-0000...)',
-                                    verbose_name='Артикул товара')
-    state = models.CharField(max_length=20, 
-                             help_text='Укажите состояние товара',
-                             verbose_name='Состояние товара',
-                             choices=STATE_CHOICES)
-    detail_number = models.CharField(max_length=30, 
-                                     help_text='Укажите номер запчасти',
-                                     verbose_name='Номер запчасти',
-                                     blank=True, 
-                                     null=True)
-    photo = models.ImageField(upload_to='images',
-                              help_text='Загрузите фото запчасти',
-                              verbose_name='Фото запчасти')
-    price = models.DecimalField(decimal_places=2, 
-                                max_digits=10,
-                                help_text='Укажите цену',
-                                verbose_name='Цена')
+class Category(models.Model):
+    """Модель, описывающая категорию товара"""
     
     class Meta:
-        ordering = ['-id']
+        db_table = 'category'
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
+        
+    CATEGORY_CHOICES = [
+        ('spare part', 'деталь авто'),
+        ('tires', 'шины'),
+        ('rims', 'диски')
+    ]
+    
+    category = models.CharField(max_length=15,
+                                help_text='Выберите категорию товара',
+                                verbose_name='Категория товара',
+                                choices=CATEGORY_CHOICES,
+                                editable=True)
     
     def __str__(self) -> str:
-        return self.name
+        return self.category
+    
+    
+class WheelSize(models.Model):
+    """Модель, описывающая размер колеса"""
+    
+    class Meta:
+        db_table = 'wheel_size'
+        verbose_name = 'Размер колеса'
+        verbose_name_plural = 'Размеры колес'
+    
+    size = models.CharField(max_length=100,
+                            help_text='Укажите соотношение высоты к ширине (для шины)',
+                            verbose_name='Размер колеса',
+                            editable=True)
+    
+    def __str__(self) -> str:
+        return self.size
+    
+    
+class WheelDiameter(models.Model):
+    """Модель, описывающая диаметр колеса"""
+    
+    class Meta:
+        db_table = 'wheel_diameter'
+        verbose_name = 'Диаметр колеса'
+        verbose_name_plural = 'Диаметры колес'
+    
+    diameter = models.IntegerField(help_text='Укажите диаметр колеса',
+                                   verbose_name='Диаметр колеса',
+                                   editable=True)
+    
+    def __str__(self) -> str:
+        return self.diameter
+    
+    
+class ProductCard(models.Model):
+    """Модель, описывающая карточку товара"""
+    
+    class Meta:
+        db_table = 'product_card'
+        verbose_name = 'Карточка товара'
+        verbose_name_plural = 'Карточки товара'
+    
+    title = models.CharField(max_length=50, 
+                             help_text='Укажите название товара',
+                             verbose_name='Название товара',
+                             editable=True)
+    category_id = models.ForeignKey('Category',
+                                    on_delete=models.CASCADE,
+                                    help_text='Выберите категорию',
+                                    verbose_name='Категория товара')
+    brand_id = models.ForeignKey('Brand',
+                                 on_delete=models.CASCADE,
+                                 help_text='Выберите бренд',
+                                 verbose_name='Бренд')
+    product_model_id = models.ForeignKey('ProductModel',
+                                         on_delete=models.CASCADE,
+                                         help_text='Выберите модель',
+                                         verbose_name='Модель',
+                                         blank=True,
+                                         null=True)
+    wheel_size_id = models.ForeignKey('WheelSize',
+                                      on_delete=models.CASCADE,
+                                      help_text='Выберите размер шины',
+                                      verbose_name='Размер шины',
+                                      blank=True,
+                                      null=True)
+    wheel_diameter_id = models.ForeignKey('WheelDiameter',
+                                          on_delete=models.CASCADE,
+                                          help_text='Выберите диаметр колеса',
+                                          verbose_name='Диаметр колеса',
+                                          blank=True,
+                                          null=True)
+    vendor_code = models.CharField(max_length=20,
+                                   help_text='Укажите артикул товара',
+                                   verbose_name='Артикул товара',
+                                   editable=True)
+    detail_number = models.CharField(max_length=45,
+                                     help_text='Укажите номер детали',
+                                     verbose_name='Номер детали',
+                                     blank=True,
+                                     null=True,
+                                     editable=True)
+    description = models.TextField(max_length=300,
+                                   help_text='Укажите краткое описание товара',
+                                   verbose_name='Описание товара',
+                                   editable=True)
+    price = models.DecimalField(max_digits=10, 
+                                decimal_places=2,
+                                help_text='Укажите цену',
+                                verbose_name='Цена',
+                                editable=True)
+    
+    def __str__(self) -> str:
+        return f'{self.title} - {self.brand_id} - {self.product_model_id}'
     
     def get_absolute_url(self):
         return reverse("model_detail", args=[str(self.id)])
     
     
-class Tires(models.Model):
-    """Модель, описывающая шину"""
-    brand = models.CharField(max_length=50, 
-                             help_text='Укажите производителя',
-                             verbose_name='Производитель')
-    model = models.CharField(max_length=50,
-                             help_text='Укажите название модели',
-                             verbose_name='Модель',)
-    size = models.CharField(max_length=15,
-                            help_text='Укажите соотношение высоты к ширине в формате: Ширина/Высота',
-                            verbose_name='Размер шины')
-    diameter = models.CharField(max_length=2,
-                                help_text='Укажите диаметр шины',
-                                verbose_name='Диаметр')
-    description = models.CharField(max_length=100, 
-                                   help_text='Краткое описание: состояние, количество и т.д.',
-                                   verbose_name='Описание')
-    photo = models.ImageField(upload_to='images',
-                              help_text='Загрузите фото шины',
-                              verbose_name='Фото шины')
-    price = models.DecimalField(decimal_places=2, 
-                                max_digits=8,
-                                help_text='Укажите цену',
-                                verbose_name='Цена')
+    
+class Photo(models.Model):
+    """Модель, описывающая фото товара"""
     
     class Meta:
-        ordering = ['-id']
+        db_table = 'photo'
+        verbose_name = 'Фото товара'
+        verbose_name_plural = 'Фото товаров'
+    
+    product_card_id = models.ForeignKey('ProductCard',
+                                        on_delete=models.CASCADE)
+    photo = models.ImageField(upload_to='images',
+                              help_text='Загрузите фото',
+                              verbose_name='Фото')
     
     def __str__(self) -> str:
-        return f'{self.brand} {self.model}'
+        return self.product_card_id
     
     def get_absolute_url(self):
         return reverse("model_detail", args=[str(self.id)])
-    
-    
-    
-class Rims(models.Model):
-    """Модель, описывающая колесный диск"""
-    PRODUCTION_CHOICES = [
-        ('alloy', 'литые'),
-        ('forged', 'кованные'),
-        ('stamped', 'штампованные')
-    ]
-    brand = models.CharField(max_length=50, 
-                            help_text='Укажите производителя',
-                            verbose_name='Производитель',
-                            blank=True,
-                            null=True)
-    production = models.CharField(max_length=12,
-                                    help_text='Укажите метод изготовления диска',
-                                    verbose_name='Метод изготовления',
-                                    choices=PRODUCTION_CHOICES)
-    diameter = models.CharField(max_length=2,
-                            help_text='Укажите диаметр диска',
-                            verbose_name='Диаметр')
-    bolt_pattern = models.CharField(max_length=10, 
-                                    help_text='Укажите сверловку/разболтовку',
-                                    verbose_name='Сверловка')
-    description = models.CharField(max_length=100, 
-                                help_text='Краткое описание: состояние, количество и т.д.',
-                                verbose_name='Описание')
-    photo = models.ImageField(upload_to='images',
-                            help_text='Загрузите фото диска',
-                            verbose_name='Фото шины'),
-    price = models.DecimalField(decimal_places=2, 
-                            max_digits=8,
-                            help_text='Укажите цену',
-                            verbose_name='Цена')
-    
-    class Meta:
-        ordering = ['-id']
-    
-    def __str__(self) -> str:
-        return self.brand
 
-    def get_absolute_url(self):
-        return reverse("model_detail", args=[str(self.id)])
-        
-        
-class SpareState(models.Model):
-    SPARES_STATE_CHOICES = [
-        ('stock', 'на складе'),
-        ('reserve', 'резерв')
-    ]
-    spares_id = models.ForeignKey('SparePart',
-                                  on_delete=models.CASCADE)
-    status = models.CharField(max_length=10,
-                              help_text='Изменить состояние заказа',
-                              verbose_name='Состояние заказа',
-                              choices=SPARES_STATE_CHOICES)
+
+class Status(models.Model):
+    """Модель, описывающая статус товара"""
     
-    def __str__(self) -> str:
-        return f'{self.spares_id} Статус: {self.status}'
+    class Meta:
+        db_table = 'status'
+        verbose_name = 'Статус товара'
+        verbose_name_plural = 'Статусы товаров'
+    
+    STATUS_CHOICES = [
+        ('stock', 'на складе'),
+        ('reserved', 'в резерве'),
+        ('sold out', 'продано')   
+    ]
+    
+    status_name = models.CharField(max_length=10,
+                                   help_text='Укажите статус товара',
+                                   verbose_name='Статус товара',
+                                   choices=STATUS_CHOICES,
+                                   default='stock',
+                                   editable=True)
+    
+    
+class ProductInstance(models.Model):
+    """Модель, описывающая информацию о статусе товара"""
+    
+    class Meta:
+        db_table = 'product_instance'
+        verbose_name = 'Информация о статусе товара'
+        verbose_name_plural = 'Информация о статусах товаров'
+        
+        
+    product_card_id = models.ForeignKey('ProductCard',
+                                        on_delete=models.CASCADE,
+                                        help_text='Выберите товар',
+                                        verbose_name='Товар')
+    status_id = models.ForeignKey('Status',
+                                  on_delete=models.CASCADE,
+                                  help_text='Выберите статус товара',
+                                  verbose_name='Статус товара')
