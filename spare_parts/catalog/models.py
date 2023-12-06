@@ -162,6 +162,11 @@ class ProductCard(models.Model):
     def __str__(self) -> str:
         return f'{self.title} - {self.brand_id} - {self.product_model_id}'
     
+    def display_brands(self):
+        return ', '.join([brand.brand_name for brand in self.brand_id.all()])
+    
+    display_brands.short_description = 'Бренды'
+    
     def get_absolute_url(self):
         return reverse("model_detail", args=[str(self.id)])
     
