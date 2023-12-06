@@ -1,13 +1,16 @@
-from .models import Brands, ModelCar, SparePart, Tires, Rims, SpareState
+from .models import Brand, ProductModel, Category, WheelSize, WheelDiameter, ProductCard, Photo, Status, ProductInstance 
 from django.contrib import admin
 
 # Register your models here.
 
-admin.site.register(Brands)
-admin.site.register(ModelCar)
-admin.site.register(SparePart)
-admin.site.register(Tires)
-admin.site.register(Rims)
-admin.site.register(SpareState)
+admin.site.register(Brand)
+admin.site.register(ProductModel)
+admin.site.register(Category)
+admin.site.register(WheelSize)
+admin.site.register(WheelDiameter)
+admin.site.register(Photo)
+admin.site.register(ProductCard)
+admin.site.register(Status)
+admin.site.register(ProductInstance)
 
 

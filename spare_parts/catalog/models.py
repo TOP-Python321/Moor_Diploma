@@ -92,9 +92,10 @@ class WheelDiameter(models.Model):
         verbose_name = 'Диаметр колеса'
         verbose_name_plural = 'Диаметры колес'
     
-    diameter = models.IntegerField(help_text='Укажите диаметр колеса',
-                                   verbose_name='Диаметр колеса',
-                                   editable=True)
+    diameter = models.CharField(max_length=5,
+                                help_text='Укажите диаметр колеса',
+                                verbose_name='Диаметр колеса',
+                                editable=True)
     
     def __str__(self) -> str:
         return self.diameter
@@ -180,8 +181,6 @@ class Photo(models.Model):
                               help_text='Загрузите фото',
                               verbose_name='Фото')
     
-    def __str__(self) -> str:
-        return self.product_card_id
     
     def get_absolute_url(self):
         return reverse("model_detail", args=[str(self.id)])
@@ -208,6 +207,9 @@ class Status(models.Model):
                                    default='stock',
                                    editable=True)
     
+    def __str__(self) -> str:
+        return self.status_name
+    
     
 class ProductInstance(models.Model):
     """Модель, описывающая информацию о статусе товара"""
@@ -226,3 +228,6 @@ class ProductInstance(models.Model):
                                   on_delete=models.CASCADE,
                                   help_text='Выберите статус товара',
                                   verbose_name='Статус товара')
+    
+    def __str__(self) -> str:
+        return f'{self.product_card_id} -- {self.status_id}'
