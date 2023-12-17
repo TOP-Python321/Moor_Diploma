@@ -1,0 +1,44 @@
+{% extends "catalog/base.html" %}
+{% block title %}Авторазбор{% endblock title %}
+{% block header %}
+    <h5>{{ text_head }}</h5>
+{% endblock header %}
+{% block content%}
+    <div class="container-fluid my-2">
+        <div class="row bg-success text-white mx-2">
+            <div class="col text-center">
+                <p>Здесь вы сможете выбрать запчасти из наличия</p>
+            </div>
+        </div>
+        <div class="row text-center text-dark lh-2">
+            <h4>Каталог</h4>
+        </div>
+        <div class="row my-2 text-white">
+            <div class="col mx-2 bg-primary">
+                Количество доступных запчастей {{ num_spares }}
+            </div>
+            <div class="col mx-2 bg-primary">
+                В наличии {{ num_instance_available }}
+            </div>
+            <div class="col mx-2 bg-primary">
+                Количество доступных марок {{ num_brand }}
+            </div>
+        </div>
+        <div class="row text-center text-dark lh-2">
+            <h3>Запчасти</h3>
+        </div>
+        {% if num_spares > 0 %}
+            <div class="row my-2">
+                {% for obj in spares %}
+                    <div class="card m-2" style="width: 9rem">
+                        <div class="card-body">
+                            <p class="card-text small">
+                                {{ obj.title }} {{ obj.brand_id }} {{ obj.product_model_id }} Цена: {{ obj.price }} руб.
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}
