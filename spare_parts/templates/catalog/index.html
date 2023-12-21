@@ -30,11 +30,17 @@
         {% if num_spares > 0 %}
             <div class="row my-2">
                 {% for obj in spares %}
-                    <div class="card m-2" style="width: 9rem">
+                    <div class="card m-1" style="width: 11rem">
                         <div class="card-body">
+                            {% if obj.photos.all %}
+                                <img src="{{ obj.photos.first.photo.url }}" class="card-img-top" alt="{{ obj.title }}">
+                            {% endif %}
                             <p class="card-text small">
-                                {{ obj.title }} {{ obj.brand_id }} {{ obj.product_model_id }} Цена: {{ obj.price }} руб.
+                                {{ obj.title }} {{ obj.brand_id }} {{ obj.product_model_id }}
                             </p>
+                        </div>
+                        <div class="card-footer">
+                            <p class="card-text">Цена: {{ obj.price }} руб.</p>
                         </div>
                     </div>
                 {% endfor %}
