@@ -2,16 +2,14 @@
 {% block content %}
     <div class="container text-start">
         <div class="row my-2">
-            <hl>Название детали - "{{ spares.title }}"</hl>
+            <hl><strong>Название детали - "{{ spares.title }}"</strong></hl>
         </div>
         <div class="row my-2">
-            <p><strong>Бренд:</strong>
-                {% for spare in spares.brand_id.all %}
-                    <a href="">{{ spare.brand_id }}</a>
-                {% endfor %}
+            <p><strong>Бренд:</strong> <a href="{{ spares.brand_id }}">{{ spares.brand_id }}</a> </p>
+            
         </div>
-        <img src="{{ spare.photos.first.photo.url }}" alt="connect" style="max-height: 200px">
-        <a href="{{ spare.photos.first.photo.url }}" class="btn btn-primary" target="blank"> Показать</a>
+        <img src="{{ spares.photos.first.photo.url }}" alt="connect" style="max-height: 200px">
+        <a href="{{ spares.photos.first.photo.url }}" class="btn btn-primary" target="blank"> Показать</a>
         <div class="row my-2">
             <div class="col">
                 <p><strong>Цeнa:</strong> {{ spare.price }} руб.</p>
