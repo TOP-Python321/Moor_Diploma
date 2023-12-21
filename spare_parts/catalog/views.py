@@ -1,10 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import ProductCard, Photo, Brand
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 
 class SparesListView(ListView):
+    model = ProductCard
+    context_object_name = 'spares'
+    
+    
+class SpareDetailView(DetailView):
     model = ProductCard
     context_object_name = 'spares'
 
