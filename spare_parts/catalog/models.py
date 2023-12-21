@@ -181,7 +181,8 @@ class Photo(models.Model):
         verbose_name_plural = 'Фото товаров'
     
     product_card_id = models.ForeignKey('ProductCard',
-                                        on_delete=models.CASCADE)
+                                        on_delete=models.CASCADE,
+                                        related_name='photos')
     photo = models.ImageField(upload_to='images',
                               help_text='Загрузите фото',
                               verbose_name='Фото')
