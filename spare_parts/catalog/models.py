@@ -229,7 +229,8 @@ class ProductInstance(models.Model):
     product_card_id = models.ForeignKey('ProductCard',
                                         on_delete=models.CASCADE,
                                         help_text='Выберите товар',
-                                        verbose_name='Товар')
+                                        verbose_name='Товар',
+                                        related_name='instance')
     status_id = models.ForeignKey('Status',
                                   on_delete=models.CASCADE,
                                   help_text='Выберите статус товара',
