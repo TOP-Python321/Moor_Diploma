@@ -1,0 +1,49 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+    <div class="container text-start">
+        <div class="row my-2">
+            <hl>Название детали - "{{ spares.title }}"</hl>
+        </div>
+        <div class="row my-2">
+            <p><strong>Бренд:</strong>
+                {% for spare in spares.brand_id.all %}
+                    <a href="">{{ spare.brand_id }}</a>
+                {% endfor %}
+        </div>
+        <img src="{{ spare.photos.first.photo.url }}" alt="connect" style="max-height: 200px">
+        <a href="{{ spare.photos.first.photo.url }}" class="btn btn-primary" target="blank"> Показать</a>
+        <div class="row my-2">
+            <div class="col">
+                <p><strong>Цeнa:</strong> {{ spare.price }} руб.</p>
+            </div>
+        </div>
+        <div class="row my-2">
+            <p><strong>Описание:</strong> {{ spare.description }}</p>
+        </div>
+        {% if spare.product_model_id %}
+        <div class="row my-2">
+            <div class="col mx-2 bg-primary text-white">
+                <p><strong>Модель:</strong> {{ spare.product_model_id }}</p>
+        </div>
+        {% endif %}
+        <div class="col mx-2 bg-primary text-white">
+            <p><strong>Заводской номер:</strong> {{ spare.detail_number }}</p>
+        </div>
+        {% comment %} <div class="col mx-2 bg-primary text-white">
+            <p><strong>Язык:</strong> {{ book.language }}</р>
+        </div>
+        <div class="col mx-2 bg-primary text-white">
+        <p><strong>Издaтeльcтвo:</strong> {{book.puЬlisher}}</p>
+        </div>
+        </div>
+        <div style="margin-left:20px; margin-top:lOpx"> {% endcomment %}
+        <h4>Количество товаров</h4>
+        {% for сору in spare.instance_set.all %}
+            <hr>
+            <p class="text-muted">
+                <strong>Инвентарный нoмep:</strong> {{ copy.id }}</p>
+            <p class="text-success">
+                <strong>Статус товара:</strong> {{copy.status_id}}</p>
+        {% endfor %}
+    </div>
+{% endblock %}
