@@ -2,41 +2,51 @@
 {% block content %}
     <div class="container text-start">
         <div class="row my-2">
-            <hl><strong>Название детали - "{{ spares.title }}"</strong></hl>
+            <h1><strong>"{{ spares.title }}" {{ spares.brand_id }} {% if spares.product_model_id%} {{ spares.product_model_id }} {{ spares.detail_number }} {% endif %}</strong></h1>
         </div>
         <div class="row my-2">
-            <p><strong>Бренд:</strong> <a href="{{ spares.brand_id }}">{{ spares.brand_id }}</a> </p>
-            
+            <p><strong>Бренд:</strong> <a href="{{ spares.brand_id }}">{{ spares.brand_id }} </a></p>
         </div>
-        <img src="{{ spares.photos.first.photo.url }}" alt="connect" style="max-height: 200px">
-        <a href="{{ spares.photos.first.photo.url }}" class="btn btn-primary" target="blank"> Показать</a>
-        <div class="row my-2">
+        <div class="row">
+            {% for photo in spares.photos.all %}
+                <div class="col-3">
+                    <img src="{{ photo.photo.url }}" alt="connect" style="max-height: 200px" class="img-fluid mb-2">
+                    <a href="{{ photo.photo.url }}" class="btn btn-primary" target="_blank">Показать</a>
+                </div>
+            {% endfor %}
+        </div>
+        {% if spares.product_model_id %}
+        <div class="row">
             <div class="col">
-                <p><strong>Цeнa:</strong> {{ spare.price }} руб.</p>
-            </div>
-        </div>
-        <div class="row my-2">
-            <p><strong>Описание:</strong> {{ spare.description }}</p>
-        </div>
-        {% if spare.product_model_id %}
-        <div class="row my-2">
-            <div class="col mx-2 bg-primary text-white">
-                <p><strong>Модель:</strong> {{ spare.product_model_id }}</p>
+                <p><strong>Модель:</strong> {{ spares.product_model_id }}</p>
         </div>
         {% endif %}
-        <div class="col mx-2 bg-primary text-white">
-            <p><strong>Заводской номер:</strong> {{ spare.detail_number }}</p>
+
+        <div class="row text-start">
+            <p><strong>Артикул:</strong> {{ spares.vendor_code }}</p>
         </div>
-        {% comment %} <div class="col mx-2 bg-primary text-white">
-            <p><strong>Язык:</strong> {{ book.language }}</р>
+        
+        {% if spares.detail_number %}
+        <div class="row">
+            <p><strong>Заводской номер:</strong> {{ spares.detail_number }}</p>
         </div>
-        <div class="col mx-2 bg-primary text-white">
-        <p><strong>Издaтeльcтвo:</strong> {{book.puЬlisher}}</p>
+        {% endif %}
+
+        <div class="row text-start">
+            <p><strong>Описание:</strong> {{ spares.description }}</p>
         </div>
+        
+        <div class="row my-2">
+            <div class="col">
+                <p><strong>Цена:</strong> {{ spares.price }} руб.</p>
+            </div>
         </div>
-        <div style="margin-left:20px; margin-top:lOpx"> {% endcomment %}
+    </div>
+        
+        
+        
         <h4>Количество товаров</h4>
-        {% for сору in spare.instance_set.all %}
+        {% for сору in spares.instance_set.all %}
             <hr>
             <p class="text-muted">
                 <strong>Инвентарный нoмep:</strong> {{ copy.id }}</p>
