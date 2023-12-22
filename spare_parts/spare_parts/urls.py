@@ -26,6 +26,8 @@ urlpatterns = [
     path('spares/', views.SparesListView.as_view(), name='spares'),
     path('spares/<int:pk>/', views.SpareDetailView.as_view(), name='spare-detail'),
     path('brands/', views.BrandListView.as_view(), name='brands-list'),
+    path('about/', views.about, name='about'),
+    path('contact/', views.contact, name='contact'),
 ]
 
 
