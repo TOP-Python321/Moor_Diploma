@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('spares/', views.SparesListView.as_view(), name='spares'),
     path('spares/<int:pk>/', views.SpareDetailView.as_view(), name='spare-detail'),
+    path('brands/', views.BrandListView.as_view(), name='brands-list'),
 ]
 
 
