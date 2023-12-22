@@ -7,6 +7,7 @@ from django.views.generic import ListView, DetailView
 class SparesListView(ListView):
     model = ProductCard
     context_object_name = 'spares'
+    paginate_by = 3
     
     
 class SpareDetailView(DetailView):
