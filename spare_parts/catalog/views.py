@@ -13,6 +13,11 @@ class SparesListView(ListView):
 class SpareDetailView(DetailView):
     model = ProductCard
     context_object_name = 'spares'
+    
+    
+class BrandListView(ListView):
+    model = Brand
+    paginate_by = 5
 
 
 def index(request):
