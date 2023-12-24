@@ -27,13 +27,17 @@ def index(request):
     brand = Brand.objects
     num_brand = Brand.objects.count()
     photo = Photo.objects.all()
+    
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
 
     context = {'text_head': text_head, 
                'spares': spares, 
                'num_spares': num_spares,
                'brand': brand,
                'num_brand': num_brand,
-               'photo': photo}
+               'photo': photo,
+               'num_visits': num_visits}
     
     return render(request, 'catalog/index.html', context) 
 
