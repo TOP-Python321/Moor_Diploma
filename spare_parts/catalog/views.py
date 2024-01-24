@@ -1,3 +1,5 @@
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, DeleteView
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
@@ -152,3 +154,17 @@ def delete_spare(request, id):
 
     context = {"spare_part": spare_part, "delete_form": delete_form}
     return render(request, "catalog/delete_confirm.html", context)
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('index')
+        if not form.is_valid():
+            print(form.errors)
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})
