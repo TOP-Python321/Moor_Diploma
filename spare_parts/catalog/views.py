@@ -1,7 +1,9 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from .models import ProductCard, Photo, Brand
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+from .forms import AddSpareForm, PhotoFormSet
+from .models import ProductCard, Photo, Brand, Category
 
 
 class SparesListView(ListView):
@@ -78,3 +80,30 @@ def contact(request):
     }
     
     return render(request, 'catalog/contact.html', context)
+
+
+def edit_spare_part(request):
+    spare_part = ProductCard.objects.all()
+    context = {'spare_part': spare_part}
+    
+    return render(request, 'catalog/edit_spare_parts.html', context)
+        
+
+def add_spare(request):
+    if request.method == 'POST':
+        form = AddSpareForm(request.POST)
+        formset = PhotoFormSet(request.POST, request.FILES, instance=ProductCard())
+
+        if form.is_valid() and formset.is_valid():
+            product_card = form.save()
+
+            formset = PhotoFormSet(request.POST, request.FILES, instance=product_card)
+            formset.save()
+
+            return redirect('spares')
+    else:
+        form = AddSpareForm()
+        formset = PhotoFormSet(instance=ProductCard())
+
+    context = {'form': form, 'formset': formset}
+    return render(request, "catalog/add_spare.html", context)
