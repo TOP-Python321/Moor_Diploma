@@ -23,6 +23,7 @@ from catalog import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('admin/', admin.site.urls),
+    path('register/', views.register, name='register'),
     path('spares/', views.SparesListView.as_view(), name='spares'),
     path('spares/<int:pk>/', views.SpareDetailView.as_view(), name='spare-detail'),
     path('brands/', views.BrandListView.as_view(), name='brands-list'),
