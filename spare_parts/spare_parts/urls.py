@@ -31,6 +31,7 @@ urlpatterns = [
     path('edit_spare_parts/', views.edit_spare_part, name='edit_spare_parts'),
     path('add_spare/', views.add_spare, name='add_spare'),
     path('delete/<int:id>/', views.delete_spare, name='delete'),
+    path('edit_spare/<int:id>/', views.edit_spare, name='edit_spare'),
 ]
 
 

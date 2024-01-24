@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.urls import reverse
-from .forms import AddSpareForm, PhotoFormSet
+from .forms import AddSpareForm, PhotoFormSet, EditSpareForm
 from .models import ProductCard, Photo, Brand, Category
 
 
@@ -117,4 +117,21 @@ def delete_spare(request, id):
         spare_part.delete()
         return HttpResponseRedirect("/edit_spare_parts/")
     except:
-        return HttpResponseNotFound( "<h2>Запчасть не найдена</h2>")
+        return HttpResponseNotFound("<h2>Запчасть не найдена</h2>")
+
+
+def edit_spare(request, id):
+    spare_part = ProductCard.objects.get(id=id)
+    
+    if request.method == "POST":
+        instance = ProductCard.objects.get(pk=id)
+        form = EditSpareForm(request.POST, request.FILES, instance=instance)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect("/edit_spare_parts/")
+    else:
+        form = EditSpareForm(instance=spare_part)
+        
+    photos = spare_part.photos.all()
+    content = {"form": form, "photos": photos}
+    return render(request, "catalog/edit_spare.html", content)

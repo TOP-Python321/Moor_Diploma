@@ -10,7 +10,8 @@
         <div class="row">
             {% for photo in spares.photos.all %}
                 <div class="col-3">
-                    <img src="{{ photo.photo.url }}" alt="connect" style="max-height: 200px" class="img-fluid mb-2">
+                    <img src="{{ photo.photo.url }}" alt="{{ photo.product_card_id.title }} {{ photo.product_card_id.detail_number }}" 
+                    style="max-height: 200px" class="img-fluid mb-2">
                     <a href="{{ photo.photo.url }}" class="btn btn-primary" target="_blank">Показать</a>
                 </div>
             {% endfor %}

@@ -20,7 +20,7 @@
                     <td><a href=" {{ spare.id }} ">{{ spare.title }} </a></td>
                     <td>{{ spare.brand_id }}</td>
                     <td>{{ spare.product_model_id }}</td>
-                    <td><img src="{{ spare.photos.first.photo.url }}" alt="connect"
+                    <td><img src="{{ spare.photos.first.photo.url }}" alt="{{ photo.product_card_id.title }} {{ photo.product_card_id.detail_number }}"
                     style="max-height: 100px;"></td>
                     <td><a href="{{ spare.photos.first.photo.url }}"
                     class="btn btn-primary"
