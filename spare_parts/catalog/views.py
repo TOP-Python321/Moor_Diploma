@@ -87,7 +87,7 @@ def edit_spare_part(request):
     context = {'spare_part': spare_part}
     
     return render(request, 'catalog/edit_spare_parts.html', context)
-        
+
 
 def add_spare(request):
     if request.method == 'POST':
@@ -97,8 +97,10 @@ def add_spare(request):
         if form.is_valid() and formset.is_valid():
             product_card = form.save()
 
-            formset = PhotoFormSet(request.POST, request.FILES, instance=product_card)
-            formset.save()
+            photos = formset.save(commit=False)
+            for photo in photos:
+                photo.product_card_id = product_card
+                photo.save()
 
             return redirect('spares')
     else:
@@ -107,3 +109,5 @@ def add_spare(request):
 
     context = {'form': form, 'formset': formset}
     return render(request, "catalog/add_spare.html", context)
+
+

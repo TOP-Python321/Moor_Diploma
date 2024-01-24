@@ -47,4 +47,5 @@ class AddSpareForm(forms.ModelForm):
         else:
             return None
 
-PhotoFormSet = inlineformset_factory(ProductCard, Photo, fields=('photo',), extra=1)
+PhotoFormSet = inlineformset_factory(ProductCard, Photo, fields=('photo',), extra=3)
+
