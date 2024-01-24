@@ -1,0 +1,11 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+    <h1>Удаление запчасти {{ spare_part.title }}</h1>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ delete_form.as_p }}
+        <input type="submit" value="Да, удалить">
+    </form>
+{% endblock %}
