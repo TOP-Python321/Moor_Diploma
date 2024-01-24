@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, DeleteView
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.urls import reverse
-from .forms import AddSpareForm, PhotoFormSet, EditSpareForm
+from .forms import AddSpareForm, PhotoFormSet, EditSpareForm, DeleteSpareForm
 from .models import ProductCard, Photo, Brand, Category
 
 
@@ -135,3 +135,20 @@ def edit_spare(request, id):
     photos = spare_part.photos.all()
     content = {"form": form, "photos": photos}
     return render(request, "catalog/edit_spare.html", content)
+
+
+def delete_spare(request, id):
+    spare_part = get_object_or_404(ProductCard, id=id)
+
+    if request.method == "POST":
+        delete_form = DeleteSpareForm(request.POST)
+
+        if delete_form.is_valid() and delete_form.cleaned_data['confirm']:
+            spare_part.delete()
+            return HttpResponseRedirect("/edit_spare_parts/")
+
+    else:
+        delete_form = DeleteSpareForm()
+
+    context = {"spare_part": spare_part, "delete_form": delete_form}
+    return render(request, "catalog/delete_confirm.html", context)
