@@ -49,3 +49,8 @@ class AddSpareForm(forms.ModelForm):
 
 PhotoFormSet = inlineformset_factory(ProductCard, Photo, fields=('photo',), extra=3)
 
+
+class EditSpareForm(forms.ModelForm):
+    class Meta:
+        model = ProductCard
+        fields = '__all__'
