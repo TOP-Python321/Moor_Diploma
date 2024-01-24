@@ -54,3 +54,7 @@ class EditSpareForm(forms.ModelForm):
     class Meta:
         model = ProductCard
         fields = '__all__'
+
+
+class DeleteSpareForm(forms.Form):
+    confirm = forms.BooleanField(label='Вы уверены, что хотите удалить эту запчасть?', required=True)
