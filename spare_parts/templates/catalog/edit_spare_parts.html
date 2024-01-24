@@ -1,0 +1,38 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+<div class="row text-start lh-2">
+    <h5>Сnисок запчастей для редактирования</h5>
+</div>
+<div class="row">
+    <div class="col-2"></div>
+    <a href="/add_spare/{{ add_spare }}">Дoбaвить запчасть</a>
+    <div class="col-8">
+    <table class="table table-striped table-bordered text-start">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Название</th>
+                <th>Бренд</th>
+                <th>Редактировать</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if spare_part %}
+                {% for spare in spare_part.all %}
+                    <tr>
+                        <td>{{ spare.id }}</td>
+                        <td>{{ spare.title }}</td>
+                        <td>{{ spare.brand_id }}</td>
+                        <td><a href="/edit_spare_part/{{ spare.id }}">Измeнить</a> ,
+                        <a href="/delete/{{ spare.id }}">Yдaлить</a></td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <p> В базе данных нет запчастей</p>
+            {% endif %}
+        <tbody>
+        </table>
+    </div>
+    <div class="col-2"></div>
+</div>
+{% endblock %}

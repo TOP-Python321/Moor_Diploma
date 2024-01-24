@@ -71,6 +71,9 @@
                         <a class="nav-link" href="{% url 'spares' %}">Все запчасти</a>
                         <a class="nav-link" href="{% url 'brands-list' %}">Все бренды</a>
                         <a class="nav-link" href="{% url 'index' %}">Ссылка 3</a>
+                        {% if user.is_authenticated %}
+                            <a class='nav-link' href="{% url 'edit_spare_parts' %}">Редактировать карточку товара</a>
+                        {% endif %}
                     </nav>
                 {% endblock sidebar %}
             </div>

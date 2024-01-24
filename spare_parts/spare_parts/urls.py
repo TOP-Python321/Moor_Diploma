@@ -28,6 +28,8 @@ urlpatterns = [
     path('brands/', views.BrandListView.as_view(), name='brands-list'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
+    path('edit_spare_parts/', views.edit_spare_part, name='edit_spare_parts'),
+    path('add_spare/', views.add_spare, name='add_spare')
 ]
 
 
