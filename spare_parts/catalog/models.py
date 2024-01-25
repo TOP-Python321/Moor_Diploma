@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 
@@ -238,3 +239,15 @@ class ProductInstance(models.Model):
     
     def __str__(self) -> str:
         return f'{self.product_card_id} -- {self.status_id}'
+    
+    
+class Cart(models.Model):
+    """Модель корзины"""
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    items = models.ManyToManyField(ProductCard, through='CartItem')
+
+class CartItem(models.Model):
+    """Модель, связывающая корзину и товар"""
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(ProductCard, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
