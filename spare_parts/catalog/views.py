@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, DeleteView
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.urls import reverse
-from .forms import AddSpareForm, PhotoFormSet, EditSpareForm, DeleteSpareForm
+from .forms import AddSpareForm, PhotoFormSet, EditSpareForm, DeleteSpareForm, CustomUserCreationForm
 from .models import ProductCard, Photo, Brand, Category
 
 
@@ -158,13 +158,11 @@ def delete_spare(request, id):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('index')
-        if not form.is_valid():
-            print(form.errors)
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
