@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.forms import inlineformset_factory
 from .models import ProductCard, Category, Brand, ProductModel, WheelSize, WheelDiameter, Photo
 
@@ -58,3 +60,12 @@ class EditSpareForm(forms.ModelForm):
 
 class DeleteSpareForm(forms.Form):
     confirm = forms.BooleanField(label='Вы уверены, что хотите удалить эту запчасть?', required=True)
+    
+    
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True, label='Email')
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+    
