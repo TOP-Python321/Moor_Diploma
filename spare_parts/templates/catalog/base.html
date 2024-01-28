@@ -30,6 +30,7 @@
                     </div>
                     <div class="col">
                         {% if user.is_authenticated %}
+                        <a class='nav-link' href="{% url 'view_cart' %}">Корзина</a>
                         <a class='nav-link' href="{% url 'logout' %}?next={% url 'index' %}">Выход</a>
                             <div>{{ user.get_username }}</div>
                         {% else %}
