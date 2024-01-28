@@ -9,4 +9,5 @@ urlpattern = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include('spare_parts.urls')),
+    path('add_to_cart/<int:pk>/', views.add_to_cart, name='add_to_cart'),
 ]

@@ -1,0 +1,29 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+    <h1>Ваша корзина</h1>
+    {% if cart_items %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Товар</th>
+                    <th>Количество</th>
+                    <th>Цена за единицу</th>
+                    <th>Итого</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                    <tr>
+                        <td>{{ item.product.title }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.product.price }} руб.</td>
+                        {% comment %} <td>{{ item.product.price * item.quantity }} руб.</td> {% endcomment %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p>Итого: {{ total_price }} руб.</p>
+    {% else %}
+        <p>Ваша корзина пуста.</p>
+    {% endif %}
+{% endblock %}

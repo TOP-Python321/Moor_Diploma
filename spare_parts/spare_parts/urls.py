@@ -33,6 +33,8 @@ urlpatterns = [
     path('add_spare/', views.add_spare, name='add_spare'),
     path('delete/<int:id>/', views.delete_spare, name='delete'),
     path('edit_spare/<int:id>/', views.edit_spare, name='edit_spare'),
+    path('add_to_cart/<int:spare_id>/', views.add_to_cart, name='add_to_cart'),
+    path('view_cart/', views.view_cart, name='view_cart'),
 ]
 
 

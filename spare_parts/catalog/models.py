@@ -245,6 +245,7 @@ class Cart(models.Model):
     """Модель корзины"""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     items = models.ManyToManyField(ProductCard, through='CartItem')
+    # переименовать items в products
 
 class CartItem(models.Model):
     """Модель, связывающая корзину и товар"""
