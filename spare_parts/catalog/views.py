@@ -22,6 +22,13 @@ class SpareDetailView(DetailView):
 class BrandListView(ListView):
     model = Brand
     paginate_by = 5
+    template_name = 'catalog/brand_list.html' 
+
+
+class BrandDetailView(DetailView):
+    model = Brand
+    template_name = 'catalog/brand_detail.html'
+    context_object_name = 'brand'
 
 
 def index(request) -> HttpResponse:
@@ -165,7 +172,7 @@ def delete_spare(request, id: int) -> HttpResponse:
         return HttpResponseNotFound("<h2>Запчасть не найдена</h2>")
 
 
-def edit_spare(request, id, int) -> HttpResponse:
+def edit_spare(request, id: int) -> HttpResponse:
     """
     Редактирование запчасти
 
