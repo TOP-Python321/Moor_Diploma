@@ -1,0 +1,29 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+    <h4>Детали модели {{ model.model_name }}</h4>
+    {% if model.productcard_set.all %}
+        <table class="table table-striped table-bordered text-start">
+            <thead>
+                <tr>
+                    <th>Запчасть</th>
+                    <th>Фото</th>
+                    <th>Описание</th>
+                    <th>Цена</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for part in model.productcard_set.all %}
+                    <tr>
+                        <td>{{ part.title }}</td>
+                        <td></td>
+                        <td>{{ part.description }}</td>
+                        <td>{{ part.price }} руб.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Для этой модели нет доступных запчастей</p>
+    {% endif %}
+{% endblock %}
