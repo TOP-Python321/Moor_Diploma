@@ -1,4 +1,5 @@
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponse
@@ -29,6 +30,37 @@ class BrandDetailView(DetailView):
     model = Brand
     template_name = 'catalog/brand_detail.html'
     context_object_name = 'brand'
+    
+    
+@login_required
+def spare_detail(request, pk):
+    spare = get_object_or_404(ProductCard, pk=pk)
+    is_in_cart = False
+
+    user_cart, _ = Cart.objects.get_or_create(user_id=request.user.id)
+    is_in_cart = user_cart.cartitem_set.filter(product=spare).exists()
+
+    if request.method == "POST":
+        form = AddSpareForm(request.POST)
+        if form.is_valid():
+            cart_item, created = CartItem.objects.get_or_create(cart=user_cart, product=spare)
+
+            if not created:
+                cart_item.quantity += 1
+                cart_item.save()
+
+            return redirect('add_to_cart', spare_id=spare.id)
+
+    else:
+        form = AddSpareForm()
+
+    context = {
+        'spare': spare,
+        'is_in_cart': is_in_cart,
+        'form': form,
+    }
+
+    return render(request, 'catalog/spare_detail.html', context)
 
 
 def index(request) -> HttpResponse:
@@ -261,6 +293,7 @@ def add_to_cart(request, spare_id: int) -> Union[HttpResponse, None]:
     return redirect('spare-detail', pk=spare_id)
 
 
+@login_required
 def view_cart(request) -> HttpResponse:
     """
     Отображение корзины
@@ -274,3 +307,12 @@ def view_cart(request) -> HttpResponse:
     total_price = sum(item.product.price * item.quantity for item in cart_items)
 
     return render(request, 'cart/view_cart.html', {'cart_items': cart_items, 'total_price': total_price})
+
+
+def remove_from_cart(request, spare_id):
+    user_cart, _ = Cart.objects.get_or_create(user_id=request.user.id)
+    spare = get_object_or_404(ProductCard, id=spare_id)
+    cart_item = CartItem.objects.get(cart=user_cart, product=spare)
+    cart_item.delete()
+
+    return redirect('view_cart')
