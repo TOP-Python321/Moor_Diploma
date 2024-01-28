@@ -1,11 +1,10 @@
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, DetailView, DeleteView
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
+from django.views.generic import ListView, DetailView
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.urls import reverse
 from .forms import AddSpareForm, PhotoFormSet, EditSpareForm, DeleteSpareForm, CustomUserCreationForm
-from .models import ProductCard, Photo, Brand, Category
+from .models import ProductCard, Photo, Brand, Cart, CartItem
 
 
 class SparesListView(ListView):
@@ -166,3 +165,23 @@ def register(request):
     else:
         form = CustomUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
+
+
+def add_to_cart(request, spare_id):
+    spare = get_object_or_404(ProductCard, id=spare_id)
+    user_cart, created = Cart.objects.get_or_create(user_id=request.user.id)
+    cart_item, item_created = CartItem.objects.get_or_create(cart=user_cart, product=spare)
+
+    if not item_created:
+        cart_item.quantity += 1
+        cart_item.save()
+
+    return redirect('spare-detail', pk=spare_id)
+
+
+def view_cart(request):
+    user_cart, created = Cart.objects.get_or_create(user_id=request.user.id)
+    cart_items = user_cart.cartitem_set.all()
+    total_price = sum(item.product.price * item.quantity for item in cart_items)
+
+    return render(request, 'cart/view_cart.html', {'cart_items': cart_items, 'total_price': total_price})
