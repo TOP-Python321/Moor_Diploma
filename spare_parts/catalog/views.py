@@ -1,8 +1,9 @@
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
-from django.http import HttpResponseRedirect, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponse
 from django.urls import reverse
+from typing import Union
 from .forms import AddSpareForm, PhotoFormSet, EditSpareForm, DeleteSpareForm, CustomUserCreationForm
 from .models import ProductCard, Photo, Brand, Cart, CartItem
 
@@ -23,7 +24,14 @@ class BrandListView(ListView):
     paginate_by = 5
 
 
-def index(request):
+def index(request) -> HttpResponse:
+    """
+    Отображение главной страницы каталога запчастей.
+
+    :param request: HttpRequest
+
+    :return: HttpResponse
+    """
     text_head = 'Каталог доступных запчастей'
     spares = ProductCard.objects.all()
     num_spares = ProductCard.objects.all().count()
@@ -45,7 +53,14 @@ def index(request):
     return render(request, 'catalog/index.html', context) 
 
 
-def about(request):
+def about(request) -> HttpResponse:
+    """
+    Отображение страницы 'О компании'
+    
+    :param request: HttpRequest
+
+    :return: HttpResponse
+    """
     text_head = 'Сведения о компании'
     name = 'Авторазбор г. Тольятти'
     used_spare_parts = ' Продажа б/у автозапчастей'
@@ -65,7 +80,14 @@ def about(request):
     return render(request, 'catalog/about.html', context)
    
    
-def contact(request):
+def contact(request) -> HttpResponse:
+    """
+    Отображение страницы 'Контакты'
+    
+    :param request: HttpRequest
+
+    :return: HttpResponse
+    """
     text_head = 'Контакты'
     name = 'Авторазбор г. Тольятти'
     address = 'г. Тольятти, ул. Примерная, 123'
@@ -83,14 +105,28 @@ def contact(request):
     return render(request, 'catalog/contact.html', context)
 
 
-def edit_spare_part(request):
+def edit_spare_part(request) -> HttpResponse:
+    """
+    Отображение страницы для редактирования запчасти из каталога
+    
+    :param request: HttpRequest
+
+    :return: HttpResponse
+    """
     spare_part = ProductCard.objects.all()
     context = {'spare_part': spare_part}
     
     return render(request, 'catalog/edit_spare_parts.html', context)
 
 
-def add_spare(request):
+def add_spare(request) -> HttpResponse:
+    """
+    Отображение страницы для добавление запчасти
+    
+    :param request: HttpRequest
+
+    :return: HttpResponse
+    """
     if request.method == 'POST':
         form = AddSpareForm(request.POST)
         formset = PhotoFormSet(request.POST, request.FILES, instance=ProductCard())
@@ -112,7 +148,15 @@ def add_spare(request):
     return render(request, "catalog/add_spare.html", context)
 
 
-def delete_spare(request, id):
+def delete_spare(request, id: int) -> HttpResponse:
+    """
+    Удаление запчасти по идентификатору
+    
+    :param request: HttpRequest
+    :param id: int, идентификатор запчасти 
+
+    :return: HttpResponse
+    """
     try:
         spare_part = ProductCard.objects.get(id=id)
         spare_part.delete()
@@ -121,7 +165,15 @@ def delete_spare(request, id):
         return HttpResponseNotFound("<h2>Запчасть не найдена</h2>")
 
 
-def edit_spare(request, id):
+def edit_spare(request, id, int) -> HttpResponse:
+    """
+    Редактирование запчасти
+
+    :param request: HttpRequest
+    :param id: int, идентификатор запчасти 
+
+    :return: HttpResponse
+    """
     spare_part = ProductCard.objects.get(id=id)
     
     if request.method == "POST":
@@ -138,7 +190,15 @@ def edit_spare(request, id):
     return render(request, "catalog/edit_spare.html", content)
 
 
-def delete_spare(request, id):
+def delete_spare(request, id: int) -> HttpResponse:
+    """
+    Удаление запчасти
+
+    :param request: HttpRequest
+    :param id: int, идентификатор запчасти 
+
+    :return: HttpResponse
+    """
     spare_part = get_object_or_404(ProductCard, id=id)
 
     if request.method == "POST":
@@ -155,7 +215,14 @@ def delete_spare(request, id):
     return render(request, "catalog/delete_confirm.html", context)
 
 
-def register(request):
+def register(request) -> HttpResponse:
+    """
+    Регистрация пользователя
+
+    :param request: HttpRequest
+
+    :return: HttpResponse
+    """
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -167,7 +234,15 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form})
 
 
-def add_to_cart(request, spare_id):
+def add_to_cart(request, spare_id: int) -> Union[HttpResponse, None]:
+    """
+    Добавление товара в корзину пользователя.
+
+    :param request: HttpRequest
+    :param spare_id: идентификатор запчасти
+
+    :return: В случае успешного добавления возвращает None, происходит перенаправление на страницу деталей запчасти.
+    """
     spare = get_object_or_404(ProductCard, id=spare_id)
     user_cart, created = Cart.objects.get_or_create(user_id=request.user.id)
     cart_item, item_created = CartItem.objects.get_or_create(cart=user_cart, product=spare)
@@ -179,7 +254,14 @@ def add_to_cart(request, spare_id):
     return redirect('spare-detail', pk=spare_id)
 
 
-def view_cart(request):
+def view_cart(request) -> HttpResponse:
+    """
+    Отображение корзины
+
+    :param request: HttpRequest
+
+    :return: HttpResponse
+    """
     user_cart, created = Cart.objects.get_or_create(user_id=request.user.id)
     cart_items = user_cart.cartitem_set.all()
     total_price = sum(item.product.price * item.quantity for item in cart_items)
