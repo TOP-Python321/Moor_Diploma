@@ -26,6 +26,7 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('spares/', views.SparesListView.as_view(), name='spares'),
     path('spares/<int:pk>/', views.SpareDetailView.as_view(), name='spare-detail'),
+    path('spare_detail/<int:pk>/', views.spare_detail, name='spare-detail-custom'),
     path('brands/', views.BrandListView.as_view(), name='brands-list'),
     path('brands/<int:pk>/', views.BrandDetailView.as_view(), name='brand-detail'),
     # path('models/<int:pk>/', views.ModelDetailView.as_view(), name='model-detail'),
@@ -37,6 +38,7 @@ urlpatterns = [
     path('edit_spare/<int:id>/', views.edit_spare, name='edit_spare'),
     path('add_to_cart/<int:spare_id>/', views.add_to_cart, name='add_to_cart'),
     path('view_cart/', views.view_cart, name='view_cart'),
+    path('remove_from_cart/<int:spare_id>/', views.remove_from_cart, name='remove_from_cart'),
 ]
 
 
