@@ -1,0 +1,10 @@
+{% extends "catalog/base.html" %}
+{% block content %}
+    <h4>Бренд: {{ brand.brand_name }}</h4>
+    <p>Модели этого бренда:</p>
+    <ul>
+        {% for model in brand.productmodel_set.all %}
+            <li>{{ model.model_name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
