@@ -5,6 +5,7 @@ from django.forms import inlineformset_factory
 from .models import ProductCard, Category, Brand, ProductModel, WheelSize, WheelDiameter, Photo
 
 class AddSpareForm(forms.ModelForm):
+    """Форма предназначена для добавления новых запчастей в каталог."""
     class Meta:
         model = ProductCard
         fields = ['title', 'category_id', 'brand_id', 'product_model_id', 'wheel_size_id', 'wheel_diameter_id', 'vendor_code', 'detail_number', 'description', 'price']
@@ -17,6 +18,7 @@ class AddSpareForm(forms.ModelForm):
     wheel_diameter_id = forms.CharField(label='Диаметр колеса', required=False)
 
     def clean_brand_id(self):
+        """Валидация и создание объекта бренда."""
         brand_name = self.cleaned_data.get('brand_id')
         if brand_name:
             brand, created = Brand.objects.get_or_create(brand_name=brand_name)
@@ -25,6 +27,7 @@ class AddSpareForm(forms.ModelForm):
             raise forms.ValidationError('Введите бренд.')
 
     def clean_product_model_id(self):
+        """Валидация и создание объекта модели."""
         model_name = self.cleaned_data.get('product_model_id')
         if model_name:
             brand_id = self.cleaned_data.get('brand_id')
@@ -34,6 +37,7 @@ class AddSpareForm(forms.ModelForm):
             return None
 
     def clean_wheel_size_id(self):
+        """Валидация и создание объекта размера шины."""
         size = self.cleaned_data.get('wheel_size_id')
         if size:
             wheel_size, created = WheelSize.objects.get_or_create(size=size)
@@ -42,6 +46,7 @@ class AddSpareForm(forms.ModelForm):
             return None
 
     def clean_wheel_diameter_id(self):
+        """Валидация и создание объекта диаметра колеса."""
         diameter = self.cleaned_data.get('wheel_diameter_id')
         if diameter:
             wheel_diameter, created = WheelDiameter.objects.get_or_create(diameter=diameter)
@@ -53,16 +58,19 @@ PhotoFormSet = inlineformset_factory(ProductCard, Photo, fields=('photo',), extr
 
 
 class EditSpareForm(forms.ModelForm):
+    """Форма предназначена для редактирования существующих запчастей."""
     class Meta:
         model = ProductCard
         fields = '__all__'
 
 
 class DeleteSpareForm(forms.Form):
+    """Форма для подтверждения удаления запчасти."""
     confirm = forms.BooleanField(label='Вы уверены, что хотите удалить эту запчасть?', required=True)
     
     
 class CustomUserCreationForm(UserCreationForm):
+    """Форма предназначена для создания новых пользователей."""
     email = forms.EmailField(required=True, label='Email')
 
     class Meta:
