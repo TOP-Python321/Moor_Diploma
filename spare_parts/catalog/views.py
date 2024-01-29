@@ -92,6 +92,42 @@ def index(request) -> HttpResponse:
     return render(request, 'catalog/index.html', context) 
 
 
+def show_wheels(request):
+    text_head = 'Каталог шин'
+    tires = ProductCard.objects.filter(category_id=2)
+    num_tires = ProductCard.objects.filter(category_id=2).count()
+    brand = Brand.objects
+    photo = Photo.objects.all()
+    
+    context = {
+        'text_head': text_head,
+        'tires': tires,
+        'num_tires': num_tires,
+        'brand': brand,
+        'photo': photo
+    }
+    
+    return render(request, 'catalog/tires_catalog.html', context)
+
+
+def show_rims(request):
+    text_head = 'Каталог дисков'
+    rims =  ProductCard.objects.filter(category_id=3)
+    num_rims = ProductCard.objects.filter(category_id=3).count()
+    brand = Brand.objects
+    photo = Photo.objects.all()
+    
+    context = {
+        'text_head': text_head,
+        'rims': rims,
+        'num_rims': num_rims,
+        'brand': brand,
+        'photo': photo
+    }
+    
+    return render(request, 'catalog/rims_catalog.html', context)
+    
+
 def about(request) -> HttpResponse:
     """
     Отображение страницы 'О компании'
