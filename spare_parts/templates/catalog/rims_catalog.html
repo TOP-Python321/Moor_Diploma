@@ -1,0 +1,39 @@
+{% extends "catalog/base.html" %}
+{% block title %}Авторазбор{% endblock title %}
+{% block header %}
+    <h5>{{ text_head }}</h5>
+{% endblock header %}
+{% block content%}
+    <div class="container-fluid my-2">
+        <div class="row bg-success text-white mx-2">
+            <div class="col text-center">
+                <p>Здесь вы сможете выбрать шины из наличия</p>
+            </div>
+        </div>
+        <div class="row text-center text-dark lh-2">
+            <h4>Каталог</h4>
+        </div>
+        <div class="row text-center text-dark lh-2">
+            <h3>Шины</h3>
+        </div>
+        {% if num_rims > 0 %}
+            <div class="row my-2">
+                {% for obj in rims %}
+                    <div class="card m-1" style="width: 11rem">
+                        <div class="card-body">
+                            {% if obj.photos.all %}
+                                <img src="{{ obj.photos.first.photo.url }}" class="card-img-top img-fluid" style="height: 150px; object-fit: cover;" alt="{{ obj.title }}">
+                            {% endif %}
+                            <p class="card-text small">
+                                <a href="{% url 'spare-detail' obj.pk %}">{{ obj.title }} {{ obj.brand_id }} {{ obj.product_model_id }}</a> 
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <p class="card-text">Цена: {{ obj.price }} руб.</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}
