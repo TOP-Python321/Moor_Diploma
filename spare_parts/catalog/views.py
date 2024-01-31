@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponse
 from django.urls import reverse
 from typing import Union
 from .forms import AddSpareForm, PhotoFormSet, EditSpareForm, DeleteSpareForm, CustomUserCreationForm
-from .models import ProductCard, Photo, Brand, Cart, CartItem
+from .models import ProductCard, Photo, Brand, Cart, CartItem, ProductModel
 
 
 class SparesListView(ListView):
@@ -92,7 +92,14 @@ def index(request) -> HttpResponse:
     return render(request, 'catalog/index.html', context) 
 
 
-def show_wheels(request):
+def show_wheels(request) -> HttpResponse:
+    """
+    Отображение всех доступных шин.
+
+    :param request: HttpRequest
+
+    :return: HttpResponse
+    """
     text_head = 'Каталог шин'
     tires = ProductCard.objects.filter(category_id=2)
     num_tires = ProductCard.objects.filter(category_id=2).count()
@@ -110,7 +117,14 @@ def show_wheels(request):
     return render(request, 'catalog/tires_catalog.html', context)
 
 
-def show_rims(request):
+def show_rims(request) -> HttpResponse:
+    """
+    Отображение всех доступных дисков.
+
+    :param request: HttpRequest
+
+    :return: HttpResponse
+    """
     text_head = 'Каталог дисков'
     rims =  ProductCard.objects.filter(category_id=3)
     num_rims = ProductCard.objects.filter(category_id=3).count()
@@ -126,6 +140,30 @@ def show_rims(request):
     }
     
     return render(request, 'catalog/rims_catalog.html', context)
+
+
+def model_detail(request, brand_id, model_id) -> HttpResponse:
+    """
+    Отображение доступных запчастей модели.
+
+    :param request: HttpRequest
+    :param brand_id: объект бренда
+    :param model_id: объект модели
+
+    :return: HttpResponse
+    """
+    brand = get_object_or_404(Brand, id=brand_id)
+    model = get_object_or_404(ProductModel, id=model_id)
+    spare_parts = ProductCard.objects.filter(brand_id=brand.id, product_model_id=model.id)
+
+    context = {
+        'brand': brand,
+        'model': model,
+        'spare_parts': spare_parts,
+    }
+
+    return render(request, 'catalog/model_parts.html', context)
+    
     
 
 def about(request) -> HttpResponse:
