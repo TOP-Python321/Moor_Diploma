@@ -17,7 +17,7 @@
                         </td>
                         <td>
                             {% for model in brand.productmodel_set.all %}
-                                {{ model.model_name }}{% if not forloop.last %}, {% endif %}
+                                <a href="{% url 'model-parts' brand.id model.id %}">{{ model.model_name }}{% if not forloop.last %}, {% endif %}</a>
                             {% endfor %}
                         </td>
                     </tr>
