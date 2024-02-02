@@ -1,6 +1,11 @@
 {% extends "catalog/base.html" %}
 {% block content %}
     <h1>{{ brand.brand_name }} {{ model.model_name }} - Запчасти</h1>
+    <h4>Поиск запчастей</h4>
+        <form method="GET" action="{% url 'search-parts' %}">
+            <input type="text" name="query" placeholder="Введите название или номер запчасти">
+            <button type="submit">Искать</button>
+        </form>
     {% if spare_parts %}
         <table class="table table-striped table-bordered text-start">
             <thead>
@@ -15,7 +20,7 @@
             <tbody>
         {% for spare in spare_parts %}
                 <tr>
-                    <td><a href=" {{ spare.id }} ">{{ spare.title }} </a></td>
+                    <td><a href="{% url 'spare-detail' spare.id %}">{{ spare.title }}</a></td>
                     <td>{{ spare.brand_id }}</td>
                     <td>{{ spare.product_model_id }}</td>
                     <td><img src="{{ spare.photos.first.photo.url }}" alt="{{ photo.product_card_id.title }} {{ photo.product_card_id.detail_number }}"
