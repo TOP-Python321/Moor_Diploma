@@ -163,6 +163,26 @@ def model_detail(request, brand_id, model_id) -> HttpResponse:
     }
 
     return render(request, 'catalog/model_parts.html', context)
+
+
+def search_parts(request) -> HttpResponse:
+    """
+    Отображение найденных запчастей
+    
+    :param request: HttpRequest
+    
+    :return: HttpResponse
+    """
+    query = request.GET.get('query', '')
+    spare_parts = ProductCard.objects.filter(title__icontains=query)  | \
+                  ProductCard.objects.filter(detail_number__icontains=query)
+    
+    context = {
+        'query': query,
+        'spare_parts': spare_parts,
+    }
+
+    return render(request, 'catalog/search_results.html', context)
     
     
 
