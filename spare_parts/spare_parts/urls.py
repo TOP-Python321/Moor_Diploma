@@ -32,6 +32,7 @@ urlpatterns = [
     path('brands/', views.BrandListView.as_view(), name='brands-list'),
     path('brands/<int:pk>/', views.BrandDetailView.as_view(), name='brand-detail'),
     path('brand/<int:brand_id>/model/<int:model_id>/', views.model_detail, name='model-parts'),
+    path('search/', views.search_parts, name='search-parts'),
     # path('models/<int:pk>/', views.ModelDetailView.as_view(), name='model-detail'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
