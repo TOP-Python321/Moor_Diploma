@@ -24,34 +24,44 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        <h4>Поиск запчастей</h4>
+        <form method="GET" action="{% url 'search-parts' %}">
+            <input type="text" name="query" placeholder="Введите название или номер запчасти">
+            <button type="submit">Искать</button>
+        </form>
     {% else %}
         <p>В базе данных нет доступных брендов</p>
     {% endif %}
 {% endblock %}
+
 {% comment %} {% extends "catalog/base.html" %}
 {% block content %}
     <h4>Доступные бренды</h4>
     {% if brand_list %}
-    <table class="table table-striped table-bordered text-start">
-        <thead>
-            <tr>
-                <th>Бренд</th>
-                <th>Фoтo</th>
-                <th>Показать фото</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for brand in brand_list.all %}
+        <table class="table table-striped table-bordered text-start">
+            <thead>
                 <tr>
-                    <td>
-                        <a href="{{ brand.id }}">{{ brand.brand_name }}</a>
-                    </td>
+                    <th>Бренд</th>
+                    <th>Модели</th>
                 </tr>
-            {% endfor %}
-        <tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for brand in brand_list %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'brand-detail' brand.id %}">{{ brand.brand_name }}</a>
+                        </td>
+                        <td>
+                            {% for model in brand.productmodel_set.all %}
+                                <a href="{% url 'model-parts' brand.id model.id %}">{{ model.model_name }}{% if not forloop.last %}, {% endif %}</a>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
         <p>В базе данных нет доступных брендов</p>
     {% endif %}
 {% endblock %} {% endcomment %}
-
