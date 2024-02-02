@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponse
 from django.urls import reverse
 from typing import Union
 from .forms import AddSpareForm, PhotoFormSet, EditSpareForm, DeleteSpareForm, CustomUserCreationForm
-from .models import ProductCard, Photo, Brand, Cart, CartItem, ProductModel
+from .models import ProductCard, Photo, Brand, Cart, CartItem, ProductModel, Status, ProductInstance
 
 
 class SparesListView(ListView):
@@ -266,6 +266,11 @@ def add_spare(request) -> HttpResponse:
 
         if form.is_valid() and formset.is_valid():
             product_card = form.save()
+            
+            status_name = form.cleaned_data['status']
+            status = Status.objects.get(status_name=status_name)
+
+            ProductInstance.objects.create(product_card_id=product_card, status_id=status)
 
             photos = formset.save(commit=False)
             for photo in photos:
