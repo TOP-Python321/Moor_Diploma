@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import inlineformset_factory
-from .models import ProductCard, Category, Brand, ProductModel, WheelSize, WheelDiameter, Photo
+from .models import ProductCard, Category, Brand, ProductModel, WheelSize, WheelDiameter, Photo, Status
 
 class AddSpareForm(forms.ModelForm):
     """Форма предназначена для добавления новых запчастей в каталог."""
@@ -16,6 +16,7 @@ class AddSpareForm(forms.ModelForm):
     product_model_id = forms.CharField(label='Модель', required=False)
     wheel_size_id = forms.CharField(label='Размер шины', required=False)
     wheel_diameter_id = forms.CharField(label='Диаметр колеса', required=False)
+    status = forms.ChoiceField(choices=Status.STATUS_CHOICES, label='Статус товара', required=True)
 
     def clean_brand_id(self):
         """Валидация и создание объекта бренда."""
